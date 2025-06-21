@@ -69,6 +69,24 @@ function renderChoices() {
   }
 }
 
+function disableChoices() {
+  const buttons = choicesEl.querySelectorAll('.choice-btn');
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+  });
+}
+
+function enableChoices() {
+  const buttons = choicesEl.querySelectorAll('.choice-btn');
+  buttons.forEach(btn => {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  });
+}
+
 function bindEvents() {
   choicesEl.addEventListener('click', e => {
     if (e.target.matches('.choice-btn')) {
@@ -107,9 +125,11 @@ function nextQuestion() {
   
   // Re-render choices for new question type
   renderChoices();
+  enableChoices(); // Ensure buttons are enabled for new question
 }
 
 function checkAnswer(selectedId) {
+  disableChoices(); // Disable buttons immediately
   const correct = selectedId === currentNote.id;
   feedback.textContent = correct ? '✅ Correct!' : `❌ Oops! It was ${currentNote.id}`;
   updateStats(correct);
@@ -120,6 +140,7 @@ function checkAnswer(selectedId) {
 }
 
 function checkStringFingerAnswer(selectedStringFinger) {
+  disableChoices(); // Disable buttons immediately
   const correct = selectedStringFinger === currentNote.stringFinger;
   feedback.textContent = correct ? '✅ Correct!' : `❌ Oops! It was ${currentNote.stringFinger}`;
   updateStats(correct);
