@@ -13,7 +13,19 @@ const STORAGE_KEY = 'violinQuizStats';
 /* --------------------------- state --------------------------- */
 let currentNote = null;
 let currentQuestionType = 'note'; // 'note' or 'stringFinger'
-let score = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { correct: 0, total: 0 };
+let score = (function() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return { correct: 0, total: 0 };
+  try {
+    const parsed = JSON.parse(raw);
+    if (typeof parsed.correct === 'number' && typeof parsed.total === 'number') {
+      return parsed;
+    }
+  } catch (e) {
+    console.warn('Invalid stored score, resetting');
+  }
+  return { correct: 0, total: 0 };
+})();
 
 /* --------------------------- DOM refs --------------------------- */
 const choicesEl = document.getElementById('choices');
