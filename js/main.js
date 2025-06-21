@@ -13,6 +13,7 @@ const STORAGE_KEY = 'violinQuizStats';
 /* --------------------------- state --------------------------- */
 let currentNote = null;
 let currentQuestionType = 'note'; // 'note' or 'stringFinger'
+let acceptingInput = true;
 let score = (function() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return { correct: 0, total: 0 };
@@ -86,6 +87,10 @@ function nextQuestion() {
   currentNote = NOTES[Math.floor(Math.random() * NOTES.length)];
   // Randomly choose question type
   currentQuestionType = Math.random() < 0.5 ? 'note' : 'stringFinger';
+
+  // Allow input for the new question
+  acceptingInput = true;
+
   
   // Show staff image for the note
   if (staffImg) {
@@ -107,12 +112,19 @@ function nextQuestion() {
   
   // Re-render choices for new question type
   renderChoices();
+
+  // Ensure buttons are enabled
+  document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('disabled'));
 }
 
 function checkAnswer(selectedId) {
+  if (!acceptingInput) return;
+  acceptingInput = false;
+
   const correct = selectedId === currentNote.id;
   feedback.textContent = correct ? '✅ Correct!' : `❌ Oops! It was ${currentNote.id}`;
   updateStats(correct);
+  document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.add('disabled'));
   setTimeout(() => {
     feedback.textContent = '';
     nextQuestion();
@@ -120,9 +132,13 @@ function checkAnswer(selectedId) {
 }
 
 function checkStringFingerAnswer(selectedStringFinger) {
+  if (!acceptingInput) return;
+  acceptingInput = false;
+
   const correct = selectedStringFinger === currentNote.stringFinger;
   feedback.textContent = correct ? '✅ Correct!' : `❌ Oops! It was ${currentNote.stringFinger}`;
   updateStats(correct);
+  document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.add('disabled'));
   setTimeout(() => {
     feedback.textContent = '';
     nextQuestion();
