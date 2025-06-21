@@ -1,14 +1,16 @@
-Place violin fingerboard diagrams or other images here.
+Place staff note images and optional diagrams here.
 
-Recommended:
-- fingerboard.svg (for string/finger overlays)
-- Staff note images for each note, named:
-  - a.svg
-  - b.svg
-  - csharp.svg
-  - d.svg
-  - e.svg
-  - fsharp.svg
-  (SVG preferred for clarity)
+Required PNG files:
+- treble_a.png
+- treble_b.png
+- treble_c.png
+- treble_d.png
+- treble_e.png
+- treble_f_sharp.png
 
-Use lowercase filenames, no spaces. 
+Optional:
+- fingerboard.svg (for the optional fingerboard diagram)
+
+You may use SVG images instead of PNGs if you prefer scalable graphics.
+
+Use lowercase filenames, no spaces.
